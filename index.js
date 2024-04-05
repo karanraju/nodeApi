@@ -2,11 +2,12 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 const Joi = require("joi");
+const cors = require("cors");
 const mysql = require("mysql");
 const jwt = require("jsonwebtoken");
 const secretKey = "secretKey";
 // const router = express.Router();
-
+app.use(cors());
 require("dotenv").config();
 const accountSid = process.env.TwILI0_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -164,7 +165,8 @@ app.get("/deletepost/:id", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("Hello World karannnnnn");
+  // res.set("Access-Control-Allow-Origin", "*");
+  res.send({ msg: "Hello World karannnnnn" });
 });
 
 app.get("/api/course", (req, res) => {
