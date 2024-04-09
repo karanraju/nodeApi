@@ -53,7 +53,7 @@ router.get("/message", (req, res) => {
 
 router.get("/createsiginUptable", (req, res) => {
   let sql =
-    "Create Table siginUptable(Name VARCHAR(255), Email VARCHAR(255),PhoneNumber VARCHAR(255),Password VARCHAR(255),ConfirmPassword VARCHAR(255),Image VARCHAR(255))";
+    "Create Table siginUptable(Email VARCHAR(255),PhoneNumber VARCHAR(255),Password VARCHAR(255))";
   db.query(sql, (err, result) => {
     if (err) throw err;
     console.log("result");
@@ -61,33 +61,26 @@ router.get("/createsiginUptable", (req, res) => {
   });
 });
 
-router.post("/api/signUp", upload.single("profileImage"), (req, res) => {
+router.post("/api/signUp", (req, res) => {
   const schema = {
-    name: Joi.string().min(3).required(),
     email: Joi.string().min(3).required(),
     password: Joi.string().min(3).required(),
-    confirmPassword: Joi.string().min(3).required(),
-    // Image:Joi.string().min(3).reuired()
+    mobileNumber: Joi.string().min(3).required(),
   };
   const result = Joi.validate(req.body, schema);
   console.log(result);
   if (result.error) {
     return res.status(400).send(result.error.details[0].message);
-    return;
   }
   let siginUptable = {
-    Name: req.body.name,
     Email: req.body.email,
-    PhoneNumber: req.body.PhoneNumber,
+    PhoneNumber: req.body.mobileNumber,
     Password: req.body.password,
-    ConfirmPassword: req.body.confirmPassword,
-    Image: req.file.path,
   };
   let sql = "INSERT INTO siginUptable SET?";
   let query = db.query(sql, siginUptable, (err, result) => {
     if (err) throw err;
-    console.log(result);
-    res.send("Post 1 added");
+    res.send({ msg: "Successfully user registered." });
   });
 });
 
